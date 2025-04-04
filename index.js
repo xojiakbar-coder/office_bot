@@ -1,12 +1,14 @@
 import TelegramBot from "node-telegram-bot-api";
-import "dotenv/config";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const bot = new TelegramBot(process.env.TOKEN, { polling: true });
 
 bot.setMyCommands([
   {
     command: "/start",
-    description: "Lounch the bot",
+    description: "Launch the bot",
   },
   {
     command: "/info",
@@ -15,16 +17,24 @@ bot.setMyCommands([
 ]);
 
 bot.on("message", async (msg) => {
-  const text = msg.text;
+  const text = msg.text?.toString();
   const chatId = msg.chat.id;
+
+  if (!text) return;
+
   if (text === "/start") {
     return bot.sendMessage(
       chatId,
-      "Assalom Alaykum office bot ga xush kelibsiz"
+      "Assalomu alaykum, Office botga xush kelibsiz!"
     );
   }
 
   if (text === "/info") {
-    return bot.sendMessage(chatId, "Bizning botimiz haqida ma'lumot");
+    return bot.sendMessage(chatId, "Bizning botimiz haqida ma'lumot.");
   }
+
+  return bot.sendMessage(
+    chatId,
+    "Noma'lum buyruq. /start yoki /info ni kiriting."
+  );
 });
